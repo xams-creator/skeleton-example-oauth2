@@ -1,0 +1,22 @@
+server:
+    port: 11111
+    max-http-header-size: 32KB
+
+
+spring:
+    main:
+        allow-bean-definition-overriding: true
+
+    flyway:
+        baseline-on-migrate: true
+
+
+mybatis:
+    type-aliases-package: com.xams.example.oauth2
+    configuration:
+        map-underscore-to-camel-case: true
+
+logging:
+    level:
+        com.xams.example: debug
+

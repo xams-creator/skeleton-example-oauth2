@@ -1,0 +1,135 @@
+buildscript {
+    ext {
+        springBootVersion = "2.3.12.RELEASE"
+        springCloudVersion = "Hoxton.SR12"
+        nexusUrl = ""
+    }
+    repositories {
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url "https://repo.spring.io/libs-release" }
+    }
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "org.springframework.boot:spring-boot-maven-plugin:${springBootVersion}"
+    }
+}
+
+
+plugins {
+    id "idea"
+    id "checkstyle"
+    id "io.spring.dependency-management" version "1.0.8.RELEASE"
+    id "com.github.spotbugs" version "2.0.0"
+    id "pmd"
+    id "org.springframework.boot" version "2.3.12.RELEASE"
+    id "org.sonarqube" version "2.7.1"
+}
+
+
+allprojects {
+    apply plugin: "idea"
+    apply plugin: "java"
+    apply plugin: "groovy"
+    apply plugin: "maven"
+    apply plugin: "io.spring.dependency-management"
+    apply plugin: "org.springframework.boot"
+    apply plugin: "checkstyle"
+    apply plugin: "pmd"
+
+    //apply plugin: "com.gorylenko.gradle-git-properties"
+    //apply plugin: 'jacoco'
+
+    group = 'com.xams.skeleton'
+    version = '0.0.1'
+    sourceCompatibility = JavaVersion.VERSION_1_8
+
+    repositories {
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+
+    idea {
+        module {
+            inheritOutputDirs = false
+            outputDir = file("$buildDir/classes/main/" as Object)
+            downloadSources = true
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+    tasks.withType(GroovyCompile) {
+        options.encoding = "UTF-8"
+    }
+    pmd {
+        toolVersion = "6.15.0"
+    }
+
+    tasks.withType(com.github.spotbugs.SpotBugsTask) {
+        ignoreFailures = false
+        reports {
+            xml.enabled false
+            html.enabled true
+        }
+    }
+
+//    tasks.withType(Pmd) {
+//        ruleSetFiles = files("${projectDir}/config/pmd/pmd.xml")
+//        ruleSets = []
+//        source = fileTree("${project.projectDir}/src/main/java")
+//        ignoreFailures = false
+//        reports {
+//            xml.enabled false
+//            html.enabled true
+//        }
+//    }
+
+    jar {
+        enabled = true
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                def releasesRepoUrl = "${nexusUrl}/repository/maven-releases/"
+                def snapshotsRepoUrl = "${nexusUrl}/repository/maven-snapshots/"
+                repository(url: version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl) {
+                    authentication(userName: "admin", password: "admin")
+                }
+            }
+        }
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+
+
+    dependencies {
+        compile('org.projectlombok:lombok')
+        annotationProcessor('org.projectlombok:lombok')
+//        compile('org.flywaydb:flyway-core')
+//        compile fileTree(dir: "lib")
+    }
+
+
+    dependencies {
+        testImplementation "org.springframework.boot:spring-boot-starter-test"
+        testImplementation(platform("org.junit:junit-bom:5.8.1"))
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+        testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
+    }
+
+    configurations {
+        compile.exclude group: "com.fasterxml.jackson.dataformat", module: "jackson-dataformat-xml"
+    }
+
+
+}

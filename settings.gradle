@@ -1,0 +1,5 @@
+rootProject.name = "skeleton-example-oauth2"
+
+//include ":skeleton-example-ouath2-lib"
+include ":skeleton-example-ouath2-authentication-server"
+include ":skeleton-example-ouath2-resource-server"

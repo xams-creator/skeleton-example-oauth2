@@ -1,0 +1,36 @@
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-aop"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+//    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.springframework.boot:spring-boot-starter-data-redis"
+    compile "org.springframework.boot:spring-boot-configuration-processor"
+//        implementation "org.springframework.boot:spring-boot-starter-websocket"
+//        implementation "org.springframework.boot:spring-boot-starter-jdbc"
+    implementation('org.springframework.boot:spring-boot-starter-security')
+    implementation('org.springframework.cloud:spring-cloud-starter-oauth2')
+}
+
+dependencies {
+//    implementation "org.springframework:spring-jdbc"
+
+//    compile "org.springframework.boot:spring-boot-starter-mail"
+
+//    implementation "org.springframework:spring-messaging"
+//        implementation "org.springframework.kafka:spring-kafka"
+//        implementation('org.springframework.cloud:spring-cloud-starter-config')
+//    compile('org.springframework.cloud:spring-cloud-starter-openfeign')
+//        compile("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    compile group: 'com.baomidou', name: 'mybatis-plus-boot-starter', version: '3.5.0'
+
+    implementation "org.springframework.boot:spring-boot-starter-logging"
+    implementation "net.logstash.logback:logstash-logback-encoder:5.3"
+
+    compile "mysql:mysql-connector-java"
+    compile "cglib:cglib:3.2.4"
+    implementation('org.flywaydb:flyway-core')
+
+//    implementation('org.springdoc:springdoc-openapi-ui:1.5.13')
+//    implementation('org.springdoc:springdoc-openapi-groovy:1.5.13')
+
+}
